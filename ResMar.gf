@@ -15,13 +15,20 @@ resource ResMar = open Prelude in {
     agr : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
 
   oper
-    VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
-    NounPhrase = {s : Case => Str ; a : Agr} ; 
+		VP	: Type = {verb : Verb ; adv : Str} ;
+		NP	: Type = {s : Case => Str ; a : Agr} ;
 
+--		VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
     Noun : Type = {s : Number => Case => Str; g : Gender} ;
     Adj  : Type = {s : Gender => Number => Case => Str} ;
+		-- Bool is polarity
     Verb : Type = {s : Bool => VForm => Str} ;
     Prep : Type = {s : Str} ;
+
+		predV : Verb -> VP = \verb -> {
+			verb = verb ;
+			adv = []
+		} ;
 
     mkNoun : (s1,_,_,s4 : Str) -> Gender -> Noun = 
       \snom,sobl,pnom,pobl,

@@ -5,11 +5,11 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
   lincat
     S  = {s : Str} ; 
     Cl = {s :  Bool => TTense => Str } ; 
-    NP = {s : Case => Str ; a : Agr} ;  
+		NP = ResMar.NP ;
+		VP = ResMar.VP ;
+		VPSlash = ResMar.VP ;
     ListNP = {s : Case => Str ; a : Agr} ;
-    VP = {verb : Verb ; compl : Agr => Str ; isv2 : Bool ; adv : Str} ;
     AP = {s : Gender => Number => Case => Str} ;
-    Comp = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
     CN = {s : Number => Case => Str; g : Gender} ;
     Det = {s : Gender => Case => Str ; n : Number} ;
     N = {s : Number => Case => Str; g : Gender} ; 
