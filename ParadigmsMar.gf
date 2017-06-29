@@ -7,7 +7,7 @@ oper
   masculine : Gender = Masc ;
   feminine : Gender = Fem ;
   neutral : Gender = Neut ;
-  
+	
   mkN = overload {
     -- worst case
     mkN : (s1,_,_,s4 : Str) -> Gender -> N 

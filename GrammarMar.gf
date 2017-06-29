@@ -7,7 +7,8 @@ concrete GrammarMar of Grammar =
   ConjunctionMar,
   StructuralMar,
   TenseMar,
-  PhraseMar
+  PhraseMar,
+	IdiomMar
   ** {
 
 flags startcat = Phr ;  unlexer = text ; lexer = text ;

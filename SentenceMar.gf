@@ -5,6 +5,7 @@ concrete SentenceMar of Sentence = CatMar ** open Prelude, ResMar in {
 
     PredVP np vp = {
 --       s = \\p,t => np.s ! subCase vp.isv2 t ++ vp.adv ++ vp.compl ! np.a ++ agrV vp.verb p np.a t ;
-			s = \\p,t => np.s ! Nom ++ vp.adv ++ agrV vp.verb p np.a t ;
+		
+		s = \\p,t => np.s ! Nom ++ vp.adv ++ vp.pprs ++ agrV vp.verb p np.a t ;
     } ;
 }

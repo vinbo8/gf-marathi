@@ -8,6 +8,6 @@ concrete NounMar of Noun = CatMar ** open Prelude, ResMar in {
 
     DetCN det cn = {
       s = \\c => det.s ! cn.g ! c ++ cn.s ! det.n ! c ; 
-      a = agr cn.g det.n P3
+      a = agr cn.g det.n P3 
     } ;
 }

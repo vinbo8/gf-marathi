@@ -6,13 +6,14 @@ concrete LexiconMar of Lexicon = CatMar ** open ParadigmsMar, Prelude in {
 	  woman_N = mkN "बाई" feminine ;
 	  house_N = mkN "घर" neutral ;
 	  tree_N = mkN "झाड" neutral ;
+	  book_N = mkN "पुस्तक" neutral ;
 	  big_A = mkA "मोठा" ;
 	  small_A = mkA "छोटा" ;
 	  green_A = mkA "हिरवा" ;
 	  red_A = mkA "लाल" ;
 	  walk_V = mkV "चाल" ; 
 	  arrive_V = mkV "बस" ; 
-    eat_V = mkV "जेव" ;
-	  love_V2 = mkV2 "मार" ;
+	  eat_V = mkV "जेव" ;
+	  hit_V2 = mkV2 "मार" ;
 	  please_V2 = mkV2 "सांग" ;
 }

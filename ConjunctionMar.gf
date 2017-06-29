@@ -6,9 +6,10 @@ concrete ConjunctionMar of Conjunction = CatMar ** open ResMar, Coordination, Pr
       a = ss.a
     } ;
 
-    BaseNP x y = twoTable Case x y ** {a = conjAgr x.a y.a} ;
+		-- fix animacy
+    BaseNP x y = twoTable Case x y ** { a = conjAgr x.a y.a } ;
 
   lincat
-    [NP] = {s1,s2 : Case => Str ; a : Agr} ;
+    [NP] = {s1,s2 : Case => Str ; a : Agr } ;
 
 }

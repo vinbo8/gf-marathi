@@ -10,13 +10,19 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 --      adv = []
 --    } ;
 --
-		SlashV2a v2 = predV v2 ;
-		ComplSlash vp np = {
-			verb = vp.verb ;
-			-- will have to include agr for ergativity
-			adv = vp.adv ++ np.s ! Acc
-		} ;
 
-    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s} ;
+	
+	SlashV2a v2 = predV v2 ;
+	
+	ComplSlash vp np = {
+		verb = vp.verb ;
+		-- will have to include agr for ergativity
+		adv = vp.adv ++ np.s ! Acc ;
+		pprs = vp.pprs
+	} ;
+
+	-- adverbs after
+    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs} ;
+    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs} ;
 
 }

@@ -5,8 +5,9 @@ resource ResMar = open Prelude in {
       Number = Sg | Pl ;
       Case = Nom | Acc | Erg | Obl;
       Gender = Masc | Fem | Neut ;
+			Animacy = Anim | Inan ;
       Person = P3 | P2 | P1 ;
-      VForm = VInf | VPres Gender Number Person | VPast Gender Number Person ;
+      VForm = VInf | VPPres | VPres Gender Number Person | VPast Gender Number Person ;
       TTense = Pres | Past ;
       Anteriority = Simul ;
 
@@ -15,8 +16,12 @@ resource ResMar = open Prelude in {
     agr : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
 
   oper
-		VP	: Type = {verb : Verb ; adv : Str} ;
-		NP	: Type = {s : Case => Str ; a : Agr} ;
+		VP	: Type = {
+			verb : Verb ; 
+			pprs : Str ; -- present participle (eg. basat)
+			adv : Str -- adverb
+		} ;
+		NP	: Type = {s : Case => Str ; a : Agr } ;
 
 --		VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
     Noun : Type = {s : Number => Case => Str; g : Gender} ;
@@ -27,6 +32,7 @@ resource ResMar = open Prelude in {
 
 		predV : Verb -> VP = \verb -> {
 			verb = verb ;
+			pprs = [] ;
 			adv = []
 		} ;
 
@@ -91,7 +97,8 @@ resource ResMar = open Prelude in {
         s = table {
               True => table {
                 VInf => basne ;
-
+				VPPres => basat ;
+				
                 VPres Masc Sg P1 => basto ;
                 VPres Fem  Sg P1 => baste ;
                 VPres Neut Sg P1 => nonExist ;
@@ -127,6 +134,8 @@ resource ResMar = open Prelude in {
 
               False => table {
                 VInf => basne ;
+				VPPres => basat ;
+
                 VPres Neut _ P1 => nonExist ;
                 VPres _    _ _  => neg False ++ basat ;
 
@@ -158,8 +167,10 @@ resource ResMar = open Prelude in {
             (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") 
     };
 
-    copula : Verb = {s = \\n => table { 
+    auxBe : Verb = {s = \\n => table { 
                 VInf => "असणे" ;
+                VPPres => nonExist ;
+                
                 VPres _ Sg P1 => neg n ++ "आहे" ;
                 VPres _ Pl P1 => neg n ++ "आहोत" ;
                 VPres _ Sg P2 => neg n ++ "आहेस" ;
