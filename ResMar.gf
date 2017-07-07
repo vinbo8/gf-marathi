@@ -50,12 +50,7 @@ resource ResMar = open Prelude in {
         g = gen
       } ;
 
-    mkPrep : Str -> Prep =
-      \s -> {s = s} ;
 	
-		--mkAdvTemp : Str -> Adv =
-			--\s -> {s = s} ;
-
     mkAdj : (s1,_,_,s4 : Str) -> Adj = 
       \hirva,hirvi,hirve,hirvya -> {
         s = table {

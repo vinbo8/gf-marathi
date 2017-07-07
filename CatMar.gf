@@ -15,9 +15,9 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
     N = {s : Number => Case => Str; g : Gender } ; 
     A = {s : Gender => Number => Case => Str} ;
     V = {s : Bool => VForm => Str} ;
-		Adv = {s : Str} ;
+		-- present in CommonX
+		-- Adv = {s : Str } ;
     V2 = Verb ** {c : Case} ;
-    --V2 = TransVerb ;
     AdA = {s : Str} ; 
     Pol = {s : Str ; b : Bool} ;
     Tense = {s : Str ; t : TTense} ;
@@ -29,7 +29,6 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
     Pron = {s : Case => Str ; a : Agr} ;
     Det = {s : Gender => Case => Str ; n : Number} ;
 
-    -- dadadadum
     Prep = {s : Str} ;
 }
 

@@ -9,6 +9,8 @@ oper
   neut : Gender = Neut ;
   
   Adv : Type = {s : Str} ;
+	Prep : Type = {s: Str} ;
+
   --
   -- NOUNS
   -- 
@@ -76,7 +78,8 @@ oper
   --
    
   mkPr : Str -> Prep
-    = \samor -> lin Prep (mkPrep samor) ;
+  -- = \samor -> lin Prep (mkPrep samor) ;
+    = \s -> {s = s} ;
       
   mkA = overload {
 		-- worst case
