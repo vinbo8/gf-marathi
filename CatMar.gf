@@ -5,9 +5,9 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
   lincat
     S  = {s : Str} ; 
     Cl = {s :  Bool => TTense => Str } ; 
-	NP = ResMar.NP ;
-	VP = ResMar.VP ;
-	VPSlash = ResMar.VP ;
+		NP = ResMar.NP ;
+		VP = ResMar.VP ;
+		VPSlash = ResMar.VP ;
     ListNP = {s : Case => Str ; a : Agr } ;
     AP = {s : Gender => Number => Case => Str} ;
     CN = {s : Number => Case => Str; g : Gender } ;
@@ -15,6 +15,7 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
     N = {s : Number => Case => Str; g : Gender } ; 
     A = {s : Gender => Number => Case => Str} ;
     V = {s : Bool => VForm => Str} ;
+		Adv = {s : Str} ;
     V2 = Verb ** {c : Case} ;
     --V2 = TransVerb ;
     AdA = {s : Str} ; 

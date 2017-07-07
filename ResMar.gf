@@ -35,7 +35,7 @@ resource ResMar = open Prelude in {
 			pprs = [] ;
 			adv = []
 		} ;
-
+		
     mkNoun : (s1,_,_,s4 : Str) -> Gender -> Noun = 
       \snom,sobl,pnom,pobl,
       gen -> {
@@ -52,6 +52,9 @@ resource ResMar = open Prelude in {
 
     mkPrep : Str -> Prep =
       \s -> {s = s} ;
+	
+		--mkAdvTemp : Str -> Adv =
+			--\s -> {s = s} ;
 
     mkAdj : (s1,_,_,s4 : Str) -> Adj = 
       \hirva,hirvi,hirve,hirvya -> {

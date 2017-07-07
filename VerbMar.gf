@@ -23,6 +23,5 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 
 	-- adverbs after
     AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs} ;
-    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs} ;
 
 }
