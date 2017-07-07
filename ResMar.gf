@@ -21,10 +21,12 @@ resource ResMar = open Prelude in {
 			pprs : Str ; -- present participle (eg. basat)
 			adv : Str -- adverb
 		} ;
+
 		NP	: Type = {s : Case => Str ; a : Agr } ;
 
 --		VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
     Noun : Type = {s : Number => Case => Str; g : Gender} ;
+		PN   : Type = {s : Case => Str ; g: Gender} ;
     Adj  : Type = {s : Gender => Number => Case => Str} ;
 		-- Bool is polarity
     Verb : Type = {s : Bool => VForm => Str} ;
@@ -36,6 +38,18 @@ resource ResMar = open Prelude in {
 			adv = []
 		} ;
 		
+		mkPN : (s1,s2 : Str) -> Gender -> PN =
+			\nom,obl,gen -> {
+				s = table {
+					Nom => nom ;
+					Acc => obl ++ SOFT_SPACE ++ "ला" ;
+					Erg => obl ++ SOFT_SPACE ++ "ने" ;
+					Obl => obl
+				} ;
+				g = gen
+		} ;
+
+
     mkNoun : (s1,_,_,s4 : Str) -> Gender -> Noun = 
       \snom,sobl,pnom,pobl,
       gen -> {

@@ -96,4 +96,8 @@ oper
     
   mkAdv : Str -> Adv
     = \s -> {s = s} ;
+
+	mkProp : Str -> Gender -> PN
+		= \vinit,g -> lin PN (mkPN vinit vinit g) ;
+
 }
