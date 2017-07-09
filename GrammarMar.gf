@@ -6,6 +6,7 @@ concrete GrammarMar of Grammar =
   SentenceMar,
   ConjunctionMar,
   StructuralMar,
+	RelativeMar,
   TenseMar,
   PhraseMar,
 	IdiomMar

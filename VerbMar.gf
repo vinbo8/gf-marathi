@@ -14,11 +14,11 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 	
 	SlashV2a v2 = predV v2 ;
 	
-	ComplSlash vp np = {
-		verb = vp.verb ;
+	ComplSlash vps np = {
+		verb = vps.verb ;
 		-- will have to include agr for ergativity
-		adv = vp.adv ++ np.s ! Acc ;
-		pprs = vp.pprs
+		adv = vps.adv ++ np.s ! Acc ;
+		pprs = vps.pprs
 	} ;
 
 	-- adverbs after

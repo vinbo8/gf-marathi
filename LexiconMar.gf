@@ -22,6 +22,7 @@ concrete LexiconMar of Lexicon = CatMar ** open ParadigmsMar, Prelude in {
     buy_V2 = mkV2 "घे" ; -- replace with LVB
     car_N = mkN "गाडी" ;
     cat_N = mkN "मांजर" fem ;
+    chair_N = mkN "खुर्ची" ;
     child_N = mkN "मुल" neut ;
     city_N = mkN "शहर" neut ;
     clean_A = mkA "स्वच्छ" ;
