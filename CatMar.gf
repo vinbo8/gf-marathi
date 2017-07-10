@@ -17,10 +17,10 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
     N = {s : Number => Case => Str; g : Gender ; anim : Animacy } ; 
     PN = {s : Case => Str; g : Gender } ; 
     A = {s : Gender => Number => Case => Str} ;
-    V = {s : Bool => VForm => Str} ;
+    V = {s : Bool => VForm => Str ; c : Case} ;
 		-- present in CommonX
 		-- Adv = {s : Str } ;
-    V2 = Verb ** {c : Case} ;
+    V2 = Verb ;
     AdA = {s : Str} ; 
     Pol = {s : Str ; b : Bool} ;
     Tense = {s : Str ; t : TTense} ;

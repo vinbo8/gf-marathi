@@ -25,12 +25,11 @@ resource ResMar = open Prelude, Maybe in {
 
 		NP	: Type = {s : Case => Str ; a : Agr ; anim: Animacy} ;
 
---		VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
     Noun : Type = {s : Number => Case => Str; g : Gender; anim: Animacy} ;
 		PN   : Type = {s : Case => Str ; g: Gender; anim: Animacy} ;
     Adj  : Type = {s : Gender => Number => Case => Str} ;
-		-- Bool is polarity
-    Verb : Type = {s : Bool => VForm => Str} ;
+		-- Bool is polarity ; Case is Nom for intransitive
+    Verb : Type = {s : Bool => VForm => Str ; c : Case} ;
     Prep : Type = {s : Str} ;
 
 		predV : Verb -> VP = \verb -> {
@@ -107,13 +106,13 @@ resource ResMar = open Prelude, Maybe in {
     nonInfAdj : Str -> Adj =
       \bavlat -> {s = \\_,_,_ => bavlat } ;
 
-    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Verb =
+    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Case -> Verb =
         \basne,basat,basto,bastos,bastes,baste,basta,bastat,
-        baslo,basle,baslas,baslis,baslat,basla,basli,baslya -> {
+        baslo,basle,baslas,baslis,baslat,basla,basli,baslya,c -> {
         s = table {
               True => table {
                 VInf => basne ;
-				VPPres => basat ;
+								VPPres => basat ;
 				
                 VPres Masc Sg P1 => basto ;
                 VPres Fem  Sg P1 => baste ;
@@ -170,18 +169,14 @@ resource ResMar = open Prelude, Maybe in {
                 VPast Fem  Pl P3 => baslya ;    
                 VPast Neut Pl P3 => basli    
               }
-            }
+            } ;
+          c = c
           };
 
-    regVerb : (_ : Str) -> Verb = \bas -> case bas of {
+    regVerb : (_ : Str) -> Case -> Verb = \bas,c -> case bas of {
       _ => mkVerb (bas + "णे") (bas + "त") (bas + "तो") (bas + "तोस") (bas + "तेस") (bas + "ते") (bas + "ता") (bas + "तात")
-            (bas + "लो") (bas + "ले") (bas + "लास") (bas + "लीस") (bas + "लात") (bas + "ला") (bas + "ली") (bas + "ल्या")
+            (bas + "लो") (bas + "ले") (bas + "लास") (bas + "लीस") (bas + "लात") (bas + "ला") (bas + "ली") (bas + "ल्या") c
     } ;
-
-    transVerb : (_ : Str) -> Verb = \mar -> case mar of {
-      _ =>  mkVerb (mar + "णे") (mar + "त") (mar + "तो") (mar + "तोस") (mar + "तेस") (mar + "ते") (mar + "ता") (mar + "तात")
-            (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") (mar + "ले") 
-    };
 
     auxBe : Verb = {s = \\n => table { 
                 VInf => "असणे" ;
@@ -208,7 +203,8 @@ resource ResMar = open Prelude, Maybe in {
                 VPast Masc Pl P3 => merge n "होते" ;
                 VPast Fem  Pl P3 => merge n "होत्या" ;
                 VPast Neut Pl P3 => merge n "होती" 
-                }
+                } ;
+                c = Nom
               } ;
 
     neg : Bool -> Str = \b -> case b of {True => [] ; False => "नाही"} ;

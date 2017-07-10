@@ -10,7 +10,6 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 --      adv = []
 --    } ;
 --
-
 	
 	SlashV2a v2 = predV v2 ;
 	
@@ -22,7 +21,11 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 			Inanimate => vps.adv ++ np.s ! Nom
 		} ;
 		pprs = vps.pprs ;
-		erg_a = np.a
+		-- default agreement if inanimate
+		erg_a = case np.anim of {
+			Animate => agr Neut Sg P3 ;
+			Inanimate => np.a
+		}
 	} ;
 
 	-- adverbs after

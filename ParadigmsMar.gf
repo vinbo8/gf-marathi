@@ -63,16 +63,16 @@ oper
     mkV : (s1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,s16 : Str) -> V 
       = \basne,basat,basto,bastos,bastes,baste,basta,bastat,
         baslo,basle,baslas,baslis,baslat,basla,basli,baslya -> lin V (mkVerb basne basat basto bastos bastes baste basta bastat
-                                                                      baslo basle baslas baslis baslat basla basli baslya) ; 
+                                                                      baslo basle baslas baslis baslat basla basli baslya Nom) ; 
     -- regular
     mkV : Str -> V
-      = \bas -> lin V (regVerb bas) ;
+      = \bas -> lin V (regVerb bas Nom) ;
 
   } ;
 
   mkV2 = overload {
     mkV2 : Str -> V2 
-      = \v -> lin V2 (regVerb v ** {c = Acc}) ;
+      = \v -> lin V2 (regVerb v Acc) ;
    } ;
    
   --
