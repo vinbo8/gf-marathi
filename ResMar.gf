@@ -1,11 +1,11 @@
-resource ResMar = open Prelude in {
+resource ResMar = open Prelude, Maybe in {
   flags coding = utf8 ;
 
   param
       Number = Sg | Pl ;
       Case = Nom | Acc | Erg | Obl;
       Gender = Masc | Fem | Neut ;
-			Animacy = Anim | Inan ;
+			Animacy = Animate | Inanimate ;
       Person = P3 | P2 | P1 ;
       VForm = VInf | VPPres | VPres Gender Number Person | VPast Gender Number Person ;
       TTense = Pres | Past ;
@@ -19,14 +19,15 @@ resource ResMar = open Prelude in {
 		VP	: Type = {
 			verb : Verb ; 
 			pprs : Str ; -- present participle (eg. basat)
-			adv : Str -- adverb
+			adv : Str ; -- adverb
+			erg_a : Agr	-- agreement for the object in case the sent is erg
 		} ;
 
-		NP	: Type = {s : Case => Str ; a : Agr } ;
+		NP	: Type = {s : Case => Str ; a : Agr ; anim: Animacy} ;
 
 --		VerbPhrase = {verb : Verb ; compl : Agr => Str ; isv2 : Bool} ;
-    Noun : Type = {s : Number => Case => Str; g : Gender} ;
-		PN   : Type = {s : Case => Str ; g: Gender} ;
+    Noun : Type = {s : Number => Case => Str; g : Gender; anim: Animacy} ;
+		PN   : Type = {s : Case => Str ; g: Gender; anim: Animacy} ;
     Adj  : Type = {s : Gender => Number => Case => Str} ;
 		-- Bool is polarity
     Verb : Type = {s : Bool => VForm => Str} ;
@@ -35,7 +36,8 @@ resource ResMar = open Prelude in {
 		predV : Verb -> VP = \verb -> {
 			verb = verb ;
 			pprs = [] ;
-			adv = []
+			adv = [] ;
+			erg_a = agr Neut Sg P3
 		} ;
 		
 		mkPN : (s1,s2 : Str) -> Gender -> PN =
@@ -46,13 +48,14 @@ resource ResMar = open Prelude in {
 					Erg => obl ++ SOFT_SPACE ++ "ने" ;
 					Obl => obl
 				} ;
-				g = gen
+				g = gen ;
+				anim = Animate
 		} ;
 
 
-    mkNoun : (s1,_,_,s4 : Str) -> Gender -> Noun = 
+    mkNoun : (s1,_,_,s4 : Str) -> Gender -> Animacy -> Noun = 
       \snom,sobl,pnom,pobl,
-      gen -> {
+      gen,anim -> {
         s = table {
           Sg => table {
             Nom => snom ; Acc => sobl + "ला" ; Erg => sobl + "ने" ; Obl => sobl
@@ -61,7 +64,8 @@ resource ResMar = open Prelude in {
             Nom => pnom ; Acc => pobl + "ना" ; Erg => pobl + "ने" ; Obl => pobl  
           }
         } ;
-        g = gen
+        g = gen ;
+        anim = anim
       } ;
 
 	
@@ -146,7 +150,7 @@ resource ResMar = open Prelude in {
 
               False => table {
                 VInf => basne ;
-				VPPres => basat ;
+								VPPres => basat ;
 
                 VPres Neut _ P1 => nonExist ;
                 VPres _    _ _  => neg False ++ basat ;
@@ -223,6 +227,8 @@ resource ResMar = open Prelude in {
         <_, P2> => agr xa.g Pl P2 ;
         <P3, _> => agr xa.g Pl P3  
     } ; 
+
+		conjAnim : Animacy -> Animacy -> Animacy = \xa,ya -> ya ;
     
     agrV : Verb -> Bool -> Agr -> TTense -> Str = \v,b,a,t ->
       case <t> of {
@@ -238,5 +244,11 @@ resource ResMar = open Prelude in {
 					Pres => Nom ;
 					_		 => Erg
 				}
+			} ;
+			
+		hargle : Maybe Animacy -> Animacy -> Animacy = \x,y ->
+			case <x.exists,y> of {
+				<True,y> => x.inner ;
+				<False,y> => y
 			} ;
 }

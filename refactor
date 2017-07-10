@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+for i in *.gf; do
+	sed -i "s/$1/$2/g" $i
+done

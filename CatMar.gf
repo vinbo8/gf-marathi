@@ -11,10 +11,10 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
 		VPSlash = ResMar.VP ;
     ListNP = {s : Case => Str ; a : Agr } ;
     AP = {s : Gender => Number => Case => Str} ;
-    CN = {s : Number => Case => Str; g : Gender } ;
+    CN = {s : Number => Case => Str; g : Gender ; anim : Animacy } ;
     Det = {s : Gender => Case => Str ; n : Number} ;
 		PN = {s : Case => Str; g : Gender} ;
-    N = {s : Number => Case => Str; g : Gender } ; 
+    N = {s : Number => Case => Str; g : Gender ; anim : Animacy } ; 
     PN = {s : Case => Str; g : Gender } ; 
     A = {s : Gender => Number => Case => Str} ;
     V = {s : Bool => VForm => Str} ;

@@ -17,11 +17,15 @@ concrete VerbMar of Verb = CatMar ** open ResMar, Prelude in {
 	ComplSlash vps np = {
 		verb = vps.verb ;
 		-- will have to include agr for ergativity
-		adv = vps.adv ++ np.s ! Acc ;
-		pprs = vps.pprs
+		adv = case np.anim of {
+			Animate => vps.adv ++ np.s ! Acc ;
+			Inanimate => vps.adv ++ np.s ! Nom
+		} ;
+		pprs = vps.pprs ;
+		erg_a = np.a
 	} ;
 
 	-- adverbs after
-    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs} ;
+    AdvVP v a = {verb = v.verb ; adv = v.adv ++ a.s ; pprs = v.pprs ; erg_a = v.erg_a} ;
 
 }
