@@ -13,6 +13,8 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
     AP = {s : Gender => Number => Case => Str} ;
     CN = {s : Number => Case => Str; g : Gender ; anim : Animacy } ;
     Det = {s : Gender => Case => Str ; n : Number} ;
+		Quant = {s : Gender => Number => Case => Str} ;
+		Num = {s : Str ; n : Number} ;
 		PN = {s : Case => Str; g : Gender} ;
     N = {s : Number => Case => Str; g : Gender ; anim : Animacy } ; 
     PN = {s : Case => Str; g : Gender } ; 

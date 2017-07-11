@@ -16,6 +16,7 @@ resource MorphoMar = open Prelude, ResMar in {
 		  n = n
 		  } ;
 
+
 		pronNP : (_,_ : Str) -> Gender -> Number -> Person -> NP = \snom,sobl,g,n,p -> {
 		  s = table { Nom => snom ; Acc => sobl + "ला" ; Erg => sobl + "ने" ; Obl => sobl } ;
 		  a = agr g n p ;

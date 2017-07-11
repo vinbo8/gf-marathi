@@ -31,6 +31,7 @@ resource ResMar = open Prelude, Maybe in {
 		-- Bool is polarity ; Case is Nom for intransitive
     Verb : Type = {s : Bool => VForm => Str ; c : Case} ;
     Prep : Type = {s : Str} ;
+    Quant : Type = {s : Gender => Number => Case => Str} ;
 
 		predV : Verb -> VP = \verb -> {
 			verb = verb ;
@@ -51,6 +52,7 @@ resource ResMar = open Prelude, Maybe in {
 				anim = Animate
 		} ;
 
+		-- explicit Pl because of nonExist
 
     mkNoun : (s1,_,_,s4 : Str) -> Gender -> Animacy -> Noun = 
       \snom,sobl,pnom,pobl,
@@ -105,6 +107,38 @@ resource ResMar = open Prelude, Maybe in {
 
     nonInfAdj : Str -> Adj =
       \bavlat -> {s = \\_,_,_ => bavlat } ;
+      
+      		  
+		mkQuant : (s1,_,_,_,_,_,_,s8 : Str) -> Quant =
+			\msg,fsg,nsg,sobl,mpl,fpl,npl,pobl -> {
+				s = table {
+					Masc => table {
+						Sg => table {
+							Nom => msg ; _ => sobl
+						} ;
+						Pl => table {
+							Nom => mpl ; _ => pobl
+						}
+					} ;
+					Fem => table {
+						Sg => table {
+							Nom => fsg ; _ => sobl
+						} ;
+						Pl => table {
+							Nom => fpl ; _ => pobl
+						}
+					} ;
+					Neut => table {
+						Sg => table {
+							Nom => nsg ; _ => sobl
+						} ;
+						Pl => table {
+							Nom => npl ; _ => pobl
+						}
+					}
+				} ;
+			} ;
+			
 
     mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Case -> Verb =
         \basne,basat,basto,bastos,bastes,baste,basta,bastat,
@@ -247,4 +281,7 @@ resource ResMar = open Prelude, Maybe in {
 				<True,y> => x.inner ;
 				<False,y> => y
 			} ;
+			
+		a_Det = mkQuant "एक" "एक" "एक" "एका" [] [] [] [] ;
+		the_Det = mkQuant [] [] [] [] [] [] [] [] ;
 }

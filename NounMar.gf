@@ -24,4 +24,13 @@ concrete NounMar of Noun = CatMar ** open Prelude, ResMar in {
 			a = agr cn.g Sg P3 ;
 			anim = cn.anim
 		} ;
+
+		DefArt = the_Det  ;
+		IndefArt = a_Det ;
+
+		NumSg = {s = [] ; n = Sg} ;
+		NumPl = {s = [] ; n = Pl} ;
+
+		DetQuant q n = {s = \\g,c => q.s ! g ! n.n ! c ; n = n.n} ;
+
 }

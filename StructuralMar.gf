@@ -4,12 +4,11 @@ concrete StructuralMar of Structural = CatMar ** open MorphoMar, ParadigmsMar, R
 
 	lin
 
-	this_Det = mkDet "हा" "ही" "हे" "ह्या" Sg ;
+	this_Quant = mkQuant "हा" "ही" "हे" "ह्या" "ही" "ह्या" "ही" "ह्या" ;
 	that_Det = mkDet "तो" "ती" "ते" "त्या" Sg ;
 	these_Det = mkDet "हे" "ह्या" "ही" "ह्या" Pl ;
 	those_Det = mkDet "ते" "त्या" "ती" "त्या" Pl ;
 
-	a_Det = mkDet "एक" "एक" "एक" "एका" Sg ;
 	every_Det = mkDet "दर" "दर" "दर" "दर" Sg ;
 	many_Det = mkDet "खूप" "खूप" "खूप" "खूप" Pl ;
 	i_Pron = pronNP "मी" "म" Masc Sg P1 ;
