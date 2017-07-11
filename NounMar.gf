@@ -18,4 +18,10 @@ concrete NounMar of Noun = CatMar ** open Prelude, ResMar in {
       a = agr cn.g det.n P3 ;
 			anim = cn.anim
     } ;
+
+		MassNP cn = {
+			s = \\c => cn.s ! Sg ! c ;
+			a = agr cn.g Sg P3 ;
+			anim = cn.anim
+		} ;
 }

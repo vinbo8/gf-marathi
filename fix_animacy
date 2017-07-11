@@ -3,7 +3,7 @@ import sys, re
 
 expr = re.compile(r';')
 for line in sys.stdin:
-    if " mkN " in line and " animate" not in line:
+    if " mkN " in line and "animate" not in line:
         sys.stdout.write(expr.sub("inanimate ;", line))
 
     else:
