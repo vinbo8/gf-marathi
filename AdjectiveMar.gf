@@ -4,6 +4,6 @@ lin
   PositA adj = adj ;
 
   AdAP ada ap = {
-    s = \\g,n,c => ada.s ++ ap.s ! g ! n ! c
+    s = \\aform => ada.s ++ ap.s ! aform ;
   } ;
 }

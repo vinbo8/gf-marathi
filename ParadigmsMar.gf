@@ -9,6 +9,7 @@ oper
   neut : Gender = Neut ;
 	animate : Animacy = Animate ;
 	inanimate : Animacy = Inanimate ;
+	dative : Case = Dat ;
   
   Adv : Type = {s : Str} ;
 	Prep : Type = {s: Str} ;
@@ -63,16 +64,19 @@ oper
     mkV : (s1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,s16 : Str) -> V 
       = \basne,basat,basto,bastos,bastes,baste,basta,bastat,
         baslo,basle,baslas,baslis,baslat,basla,basli,baslya -> lin V (mkVerb basne basat basto bastos bastes baste basta bastat
-                                                                      baslo basle baslas baslis baslat basla basli baslya Nom) ; 
+                                                                      baslo basle baslas baslis baslat basla basli baslya Nom Nom) ; 
     -- regular
     mkV : Str -> V
-      = \bas -> lin V (regVerb bas Nom) ;
+      = \bas -> lin V (regVerb bas Nom Nom) ;
 
   } ;
 
   mkV2 = overload {
+		-- default = nom acc
     mkV2 : Str -> V2 
-      = \v -> lin V2 (regVerb v Acc) ;
+      = \v -> lin V2 (regVerb v Nom Acc) ;
+    mkV2 : Str -> Case -> V2
+			= \v,sc -> lin V2 (regVerb v sc Acc) ;
    } ;
    
   --

@@ -3,11 +3,12 @@ resource ResMar = open Prelude, Maybe in {
 
   param
       Number = Sg | Pl ;
-      Case = Nom | Acc | Erg | Obl;
+      Case = Nom | Acc | Dat | Erg | Obl;
       Gender = Masc | Fem | Neut ;
 			Animacy = Animate | Inanimate ;
       Person = P3 | P2 | P1 ;
       VForm = VInf | VPPres | VPres Gender Number Person | VPast Gender Number Person ;
+      AForm = ANom Gender Number | AObl ;
       TTense = Pres | Past ;
       Anteriority = Simul ;
 
@@ -27,9 +28,9 @@ resource ResMar = open Prelude, Maybe in {
 
     Noun : Type = {s : Number => Case => Str; g : Gender; anim: Animacy} ;
 		PN   : Type = {s : Case => Str ; g: Gender; anim: Animacy} ;
-    Adj  : Type = {s : Gender => Number => Case => Str} ;
+    Adj : Type = {s : AForm => Str} ;
 		-- Bool is polarity ; Case is Nom for intransitive
-    Verb : Type = {s : Bool => VForm => Str ; c : Case} ;
+    Verb : Type = {s : Bool => VForm => Str ; subj_c : Case ; obj_c : Case} ;
     Prep : Type = {s : Str} ;
     Quant : Type = {s : Gender => Number => Case => Str} ;
 
@@ -45,6 +46,7 @@ resource ResMar = open Prelude, Maybe in {
 				s = table {
 					Nom => nom ;
 					Acc => obl ++ SOFT_SPACE ++ "ला" ;
+					Dat => obl ++ SOFT_SPACE ++ "ला" ;
 					Erg => obl ++ SOFT_SPACE ++ "ने" ;
 					Obl => obl
 				} ;
@@ -59,46 +61,29 @@ resource ResMar = open Prelude, Maybe in {
       gen,anim -> {
         s = table {
           Sg => table {
-            Nom => snom ; Acc => sobl + "ला" ; Erg => sobl + "ने" ; Obl => sobl
+            Nom => snom ; Acc => sobl + "ला" ; Dat => sobl + "ला" ; Erg => sobl + "ने" ; Obl => sobl
           } ;
           Pl => table {
-            Nom => pnom ; Acc => pobl + "ना" ; Erg => pobl + "ने" ; Obl => pobl  
+            Nom => pnom ; Acc => pobl + "ना" ; Dat => sobl + "ना" ; Erg => pobl + "ने" ; Obl => pobl  
           }
         } ;
         g = gen ;
         anim = anim
       } ;
+      
+    mkAdj : (s1,_,_,s4 : Str) -> Adj =
+			\hirva,hirvi,hirve,hirvya -> {
+				s = table {
+					AObl => hirvya ;
+					ANom Masc Sg => hirva ;
+					ANom Fem Sg => hirvi ;
+					ANom Neut Sg => hirve ;
+					ANom Masc Pl => hirvi ;
+					ANom Fem Pl => hirvya ;
+					ANom Neut Pl => hirvi 
+				}
+			} ;
 
-	
-    mkAdj : (s1,_,_,s4 : Str) -> Adj = 
-      \hirva,hirvi,hirve,hirvya -> {
-        s = table {
-          Masc => table {
-            Sg => table {
-              Nom => hirva ; _ => hirvya
-            }; 
-            Pl => table {
-              Nom => hirve ; _ => hirvya
-            }
-          } ;
-          Fem => table {
-            Sg => table {
-              Nom => hirvi ; _ => hirvya
-            } ;
-            Pl => table {
-              Nom => hirvya ; _ => hirvya
-            }
-          } ;
-          Neut => table {
-            Sg => table {
-              Nom => hirve ; _ => hirvya    
-            } ;
-            Pl => table {
-              Nom => hirvi ; _ => hirvya
-            } 
-          } 
-        } ; 
-      } ; 
     
     regAdj : Str -> Adj =
       \hirva -> case hirva of {
@@ -106,7 +91,7 @@ resource ResMar = open Prelude, Maybe in {
       } ;
 
     nonInfAdj : Str -> Adj =
-      \bavlat -> {s = \\_,_,_ => bavlat } ;
+      \bavlat -> {s = \\_ => bavlat } ;
       
       		  
 		mkQuant : (s1,_,_,_,_,_,_,s8 : Str) -> Quant =
@@ -140,9 +125,9 @@ resource ResMar = open Prelude, Maybe in {
 			} ;
 			
 
-    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Case -> Verb =
+    mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Case -> Case -> Verb =
         \basne,basat,basto,bastos,bastes,baste,basta,bastat,
-        baslo,basle,baslas,baslis,baslat,basla,basli,baslya,c -> {
+        baslo,basle,baslas,baslis,baslat,basla,basli,baslya,sc,oc -> {
         s = table {
               True => table {
                 VInf => basne ;
@@ -204,12 +189,13 @@ resource ResMar = open Prelude, Maybe in {
                 VPast Neut Pl P3 => basli    
               }
             } ;
-          c = c
+          subj_c = sc ;
+          obj_c = oc
           };
 
-    regVerb : (_ : Str) -> Case -> Verb = \bas,c -> case bas of {
+    regVerb : (_ : Str) -> Case -> Case -> Verb = \bas,sc,oc -> case bas of {
       _ => mkVerb (bas + "णे") (bas + "त") (bas + "तो") (bas + "तोस") (bas + "तेस") (bas + "ते") (bas + "ता") (bas + "तात")
-            (bas + "लो") (bas + "ले") (bas + "लास") (bas + "लीस") (bas + "लात") (bas + "ला") (bas + "ली") (bas + "ल्या") c
+            (bas + "लो") (bas + "ले") (bas + "लास") (bas + "लीस") (bas + "लात") (bas + "ला") (bas + "ली") (bas + "ल्या") sc oc
     } ;
 
     auxBe : Verb = {s = \\n => table { 
@@ -238,7 +224,8 @@ resource ResMar = open Prelude, Maybe in {
                 VPast Fem  Pl P3 => merge n "होत्या" ;
                 VPast Neut Pl P3 => merge n "होती" 
                 } ;
-                c = Nom
+                subj_c = Nom ;
+                obj_c = Nom
               } ;
 
     neg : Bool -> Str = \b -> case b of {True => [] ; False => "नाही"} ;
@@ -266,6 +253,12 @@ resource ResMar = open Prelude, Maybe in {
         <Past> => v.s ! b ! VPast a.g a.n a.p 
     } ;
     
+    agrA : Adj -> Gender -> Number -> Case -> Str = \adj,g,n,c ->
+			case <c> of {
+				<Nom> => adj.s ! ANom g n ;
+				<_>		=> adj.s ! AObl
+		} ;
+		
     -- ergativity: subject is nominative in the present tense
     subCase : Bool -> TTense -> Case = \erg,t ->
 			case erg of {

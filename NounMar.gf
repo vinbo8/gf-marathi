@@ -11,7 +11,18 @@ concrete NounMar of Noun = CatMar ** open Prelude, ResMar in {
 
     UsePron p = p ** {anim = Animate} ;
 
-    AdjCN ap cn = {s = \\n,c => ap.s ! cn.g ! n ! c ++ cn.s ! n ! c ; g = cn.g ; anim = cn.anim} ;
+--    AdjCN ap cn = {s = \\n,c => ap.s ! cn.g ! n ! c ++ cn.s ! n ! c ; g = cn.g ; anim = cn.anim} ;
+
+--		AdjCN ap cn = {
+--			s = \\n,c => case c of {
+--				Nom => ap.s ! ANom cn.g n ++ cn.s ! n ! c ;
+--				_		=> ap.s ! AObl ++ cn.s ! n ! c
+--			} ;
+--			g = cn.g ;
+--			anim = cn.anim
+--		} ;
+
+		AdjCN ap cn = {s = \\n,c => agrA ap cn.g n c ++ cn.s ! n ! c ; g = cn.g ; anim = cn.anim} ;
 
     DetCN det cn = {
       s = \\c => det.s ! cn.g ! c ++ cn.s ! det.n ! c ; 
