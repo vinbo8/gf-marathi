@@ -4,8 +4,8 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
 
   lincat
     S  = {s : Str} ; 
-    Cl = {s : Bool => TTense => Str } ; 
-		ClSlash = {s : Bool => TTense => Str } ;
+    Cl = {s : Polarity => TTense => Str } ; 
+		ClSlash = {s : Polarity => TTense => Str } ;
 		NP = ResMar.NP ;
 		VP = ResMar.VP ;
 		VPSlash = ResMar.VP ;
@@ -13,18 +13,18 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
 		AP = {s : AForm => Str} ;
     CN = {s : Number => Case => Str; g : Gender ; anim : Animacy } ;
     Det = {s : Gender => Case => Str ; n : Number} ;
-		Quant = {s : Gender => Number => Case => Str} ;
+		Quant = {s : QForm => Str} ;
 		Num = {s : Str ; n : Number} ;
 		PN = {s : Case => Str; g : Gender} ;
     N = {s : Number => Case => Str; g : Gender ; anim : Animacy } ; 
     PN = {s : Case => Str; g : Gender } ; 
 		A = {s : AForm => Str} ;
-    V = {s : Bool => VForm => Str ; subj_c : Case ; obj_c : Case} ;
+    V = {s : VForm => Str ; subj_c : Case ; obj_c : Case} ;
 		-- present in CommonX
 		-- Adv = {s : Str } ;
     V2 = Verb ;
     AdA = {s : Str} ; 
-    Pol = {s : Str ; b : Bool} ;
+    Pol = {s : Str ; p : Polarity} ;
     Tense = {s : Str ; t : TTense} ;
     Temp = {s : Str ; t : TTense ; a : Anteriority} ;
     Ant = {s : Str ; a : Anteriority} ;
@@ -38,7 +38,7 @@ concrete CatMar of Cat = CommonX - [Temp,Tense,Pol,Ant,AdA] ** open ResMar, Prel
 
 		-- RELATIVE
 		RS = {s : Str} ;
-		RCl = {s : Bool => TTense => Str } ;
+		RCl = {s : Polarity => TTense => Str } ;
 		RP = {s : Str } ;
 }
 

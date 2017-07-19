@@ -7,8 +7,12 @@ resource ResMar = open Prelude, Maybe in {
       Gender = Masc | Fem | Neut ;
 			Animacy = Animate | Inanimate ;
       Person = P3 | P2 | P1 ;
-      VForm = VInf | VPPres | VPres Gender Number Person | VPast Gender Number Person ;
+      Polarity = Pos | Neg ;
+      -- negation before/after word
+      NDirection = Back | Front ;
+      VForm = VInf | VPresPart Polarity | VPres Polarity Gender Number Person | VPast Polarity Gender Number Person ;
       AForm = ANom Gender Number | AObl ;
+      QForm = QNom Gender Number | QObl Number ;
       TTense = Pres | Past ;
       Anteriority = Simul ;
 
@@ -30,9 +34,9 @@ resource ResMar = open Prelude, Maybe in {
 		PN   : Type = {s : Case => Str ; g: Gender; anim: Animacy} ;
     Adj : Type = {s : AForm => Str} ;
 		-- Bool is polarity ; Case is Nom for intransitive
-    Verb : Type = {s : Bool => VForm => Str ; subj_c : Case ; obj_c : Case} ;
+    Verb : Type = {s : VForm => Str ; subj_c : Case ; obj_c : Case} ;
     Prep : Type = {s : Str} ;
-    Quant : Type = {s : Gender => Number => Case => Str} ;
+    Quant : Type = {s : QForm => Str} ;
 
 		predV : Verb -> VP = \verb -> {
 			verb = verb ;
@@ -94,144 +98,117 @@ resource ResMar = open Prelude, Maybe in {
       \bavlat -> {s = \\_ => bavlat } ;
       
       		  
-		mkQuant : (s1,_,_,_,_,_,_,s8 : Str) -> Quant =
+    mkQuant : (sq,_,_,_,_,_,_,s8 : Str) -> Quant = 
 			\msg,fsg,nsg,sobl,mpl,fpl,npl,pobl -> {
 				s = table {
-					Masc => table {
-						Sg => table {
-							Nom => msg ; _ => sobl
-						} ;
-						Pl => table {
-							Nom => mpl ; _ => pobl
-						}
-					} ;
-					Fem => table {
-						Sg => table {
-							Nom => fsg ; _ => sobl
-						} ;
-						Pl => table {
-							Nom => fpl ; _ => pobl
-						}
-					} ;
-					Neut => table {
-						Sg => table {
-							Nom => nsg ; _ => sobl
-						} ;
-						Pl => table {
-							Nom => npl ; _ => pobl
-						}
-					}
-				} ;
+					QNom Masc Sg => msg ;
+					QNom Fem Sg => fsg ;
+					QNom Neut Sg => nsg ;
+					QNom Masc Pl => mpl ;
+					QNom Fem Pl => fpl ;
+					QNom Neut Pl => npl ;
+					QObl Sg => sobl ;
+					QObl Pl => pobl
+				}
 			} ;
-			
+    
 
     mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x16 : Str) -> Case -> Case -> Verb =
-        \basne,basat,basto,bastos,bastes,baste,basta,bastat,
-        baslo,basle,baslas,baslis,baslat,basla,basli,baslya,sc,oc -> {
-        s = table {
-              True => table {
-                VInf => basne ;
-								VPPres => basat ;
+			\basne,basat,basto,bastos,bastes,baste,basta,bastat,
+			baslo,basle,baslas,baslis,baslat,basla,basli,baslya,sc,oc -> {
+			s = table {
+				VInf => basne ;
 				
-                VPres Masc Sg P1 => basto ;
-                VPres Fem  Sg P1 => baste ;
-                VPres Neut Sg P1 => nonExist ;
-                VPres Masc Pl P1 => basto ;
-                VPres Fem  Pl P1 => basto ;
-                VPres Neut Pl P1 => nonExist ;
-                VPres Masc Sg P2 => bastos ;
-                VPres Fem  Sg P2 => bastes ;
-                VPres Neut Sg P2 => nonExist ;
-                VPres Masc Pl P2 => basta ;
-                VPres Fem  Pl P2 => basta ;
-                VPres Neut Pl P2 => nonExist ;
-                VPres Masc Sg P3 => basto ;
-                VPres Fem  Sg P3 => baste ;
-                VPres Neut Sg P3 => baste ;
-                VPres _    Pl P3 => bastat ;
-
-                VPast Masc Sg P1 => baslo ;     
-                VPast Fem  Sg P1 => basle ;     
-                VPast Neut _  P1 => nonExist ;  
-                VPast _    Pl P1 => baslo ;     
-                VPast Masc Sg P2 => baslas ;    
-                VPast Fem  Sg P2 => baslis ;    
-                VPast Neut _  P2 => nonExist ;  
-                VPast _    Pl P2 => baslat ;    
-                VPast Masc Sg P3 => basla ;     
-                VPast Fem  Sg P3 => basli ;     
-                VPast Neut Sg P3 => basle ;     
-                VPast Masc Pl P3 => basle ;     
-                VPast Fem  Pl P3 => baslya ;    
-                VPast Neut Pl P3 => basli    
-              } ;
-
-              False => table {
-                VInf => basne ;
-								VPPres => basat ;
-
-                VPres Neut _ P1 => nonExist ;
-                VPres _    _ _  => neg False ++ basat ;
-
-                VPast Masc Sg P1 => baslo ;     
-                VPast Fem  Sg P1 => basle ;     
-                VPast Neut _  P1 => nonExist ;  
-                VPast _    Pl P1 => baslo ;     
-                VPast Masc Sg P2 => baslas ;    
-                VPast Fem  Sg P2 => baslis ;    
-                VPast Neut _  P2 => nonExist ;  
-                VPast _    Pl P2 => baslat ;    
-                VPast Masc Sg P3 => basla ;     
-                VPast Fem  Sg P3 => basli ;     
-                VPast Neut Sg P3 => basle ;     
-                VPast Masc Pl P3 => basle ;     
-                VPast Fem  Pl P3 => baslya ;    
-                VPast Neut Pl P3 => basli    
-              }
-            } ;
-          subj_c = sc ;
-          obj_c = oc
-          };
+				VPresPart p => pol_adjust p Front basat ;
+				
+				-- imperfective forms
+				VPres Pos Masc Sg P1 => basto ;
+				VPres Pos Fem  Sg P1 => baste ;
+				VPres Pos Neut Sg P1 => nonExist ;
+				VPres Pos Masc Pl P1 => basto ;
+				VPres Pos Fem  Pl P1 => basto ;
+				VPres Pos Neut Pl P1 => nonExist ;
+				VPres Pos Masc Sg P2 => bastos ;
+				VPres Pos Fem  Sg P2 => bastes ;
+				VPres Pos Neut Sg P2 => nonExist ;
+				VPres Pos Masc Pl P2 => basta ;
+				VPres Pos Fem  Pl P2 => basta ;
+				VPres Pos Neut Pl P2 => nonExist ;
+				VPres Pos Masc Sg P3 => basto ;
+				VPres Pos Fem  Sg P3 => baste ;
+				VPres Pos Neut Sg P3 => baste ;
+				VPres Pos _    Pl P3 => bastat ;
+			
+				VPres Neg Neut _ P1 => nonExist ;
+				VPres Neg _ _ _			=> pol_adjust Neg Front basat ;
+				
+				-- perfective forms
+				VPast p Masc Sg P1 => pol_adjust p Back baslo ;     
+				VPast p Fem  Sg P1 => pol_adjust p Back basle ;     
+				VPast p Neut _  P1 => nonExist ;  
+				VPast p _    Pl P1 => pol_adjust p Back baslo ;     
+				VPast p Masc Sg P2 => pol_adjust p Back baslas ;    
+				VPast p Fem  Sg P2 => pol_adjust p Back baslis ;    
+				VPast p Neut _  P2 => nonExist ;  
+				VPast p _    Pl P2 => pol_adjust p Back baslat ;    
+				VPast p Masc Sg P3 => pol_adjust p Back basla ;     
+				VPast p Fem  Sg P3 => pol_adjust p Back basli ;     
+				VPast p Neut Sg P3 => pol_adjust p Back basle ;     
+				VPast p Masc Pl P3 => pol_adjust p Back basle ;     
+				VPast p Fem  Pl P3 => pol_adjust p Back baslya ;    
+				VPast p Neut Pl P3 => pol_adjust p Back basli 
+			} ;
+			subj_c = sc ;
+			obj_c = oc
+		} ;
 
     regVerb : (_ : Str) -> Case -> Case -> Verb = \bas,sc,oc -> case bas of {
       _ => mkVerb (bas + "णे") (bas + "त") (bas + "तो") (bas + "तोस") (bas + "तेस") (bas + "ते") (bas + "ता") (bas + "तात")
             (bas + "लो") (bas + "ले") (bas + "लास") (bas + "लीस") (bas + "लात") (bas + "ला") (bas + "ली") (bas + "ल्या") sc oc
     } ;
+    
+    auxBe : Verb = {s = table {
+			VInf => "असणे" ;
+			
+			VPresPart _ => nonExist ;
+			
+			-- present (NOT imperfective)
+			VPres p _ Sg P1 => pol_adjust p Back "आहे" ;
+			VPres p _ Pl P1 => pol_adjust p Back "आहोत" ;
+			VPres p _ Sg P2 => pol_adjust p Back "आहेस" ;
+			VPres p _ Pl P2 => pol_adjust p Back "आहात" ;
+			VPres p _ Sg P3 => pol_adjust p Back "आहे" ;
+			VPres p _ Pl P3 => pol_adjust p Back "आहेत" ;
 
-    auxBe : Verb = {s = \\n => table { 
-                VInf => "असणे" ;
-                VPPres => nonExist ;
-                
-                VPres _ Sg P1 => neg n ++ "आहे" ;
-                VPres _ Pl P1 => neg n ++ "आहोत" ;
-                VPres _ Sg P2 => neg n ++ "आहेस" ;
-                VPres _ Pl P2 => neg n ++ "आहात" ;
-                VPres _ Sg P3 => neg n ++ "आहे" ;
-                VPres _ Pl P3 => neg n ++ "आहेत" ;
-                
-                VPast Masc Sg P1 => merge n "होतो" ;
-                VPast Fem  Sg P1 => merge n "होते" ;
-                VPast Neut _  P1 => nonExist ;
-                VPast _    Pl P1 => merge n "होतो" ;
-                VPast Masc Sg P2 => merge n "होतास" ;
-                VPast Fem  Sg P2 => merge n "होतिस" ;
-                VPast Neut _  P2 => nonExist ;
-                VPast _    Pl P2 => merge n "होता" ;
-                VPast Masc Sg P3 => merge n "होता" ;
-                VPast Fem  Sg P3 => merge n "होती" ;
-                VPast Neut Sg P3 => merge n "होतं" ;
-                VPast Masc Pl P3 => merge n "होते" ;
-                VPast Fem  Pl P3 => merge n "होत्या" ;
-                VPast Neut Pl P3 => merge n "होती" 
-                } ;
-                subj_c = Nom ;
-                obj_c = Nom
-              } ;
+			-- past (NOT perfective)
+			VPast p Masc Sg P1 => merge_neg p "होतो" ;
+			VPast p Fem  Sg P1 => merge_neg p "होते" ;
+			VPast p Neut _  P1 => nonExist ;
+			VPast p _    Pl P1 => merge_neg p "होतो" ;
+			VPast p Masc Sg P2 => merge_neg p "होतास" ;
+			VPast p Fem  Sg P2 => merge_neg p "होतिस" ;
+			VPast p Neut _  P2 => nonExist ;
+			VPast p _    Pl P2 => merge_neg p "होता" ;
+			VPast p Masc Sg P3 => merge_neg p "होता" ;
+			VPast p Fem  Sg P3 => merge_neg p "होती" ;
+			VPast p Neut Sg P3 => merge_neg p "होतं" ;
+			VPast p Masc Pl P3 => merge_neg p "होते" ;
+			VPast p Fem  Pl P3 => merge_neg p "होत्या" ;
+			VPast p Neut Pl P3 => merge_neg p "होती" 
+			} ;
+			subj_c = Nom ;
+			obj_c = Nom
+		} ;
 
-    neg : Bool -> Str = \b -> case b of {True => [] ; False => "नाही"} ;
+    pol_adjust : Polarity -> NDirection -> Str -> Str = \p,d,s -> case p of {
+			Pos => s ; Neg => case d of {
+				Back => "नाही" ++ s; 
+				Front => s ++ "नाही"
+			}
+		} ;
 
-    merge : Bool -> Str -> Str = \b -> case b of {
-      True => \s -> s ; False => \s -> case s of {
+    merge_neg : Polarity -> Str -> Str = \p,s -> case p of {
+      Pos => s ; Neg => case s of {
 				"हो" + suf => "न्हव" + suf
       } 
     } ;
@@ -247,16 +224,22 @@ resource ResMar = open Prelude, Maybe in {
 
 		conjAnim : Animacy -> Animacy -> Animacy = \xa,ya -> ya ;
     
-    agrV : Verb -> Bool -> Agr -> TTense -> Str = \v,b,a,t ->
+    agrV : Verb -> Polarity -> Agr -> TTense -> Str = \v,p,a,t ->
       case <t> of {
-        <Pres> => v.s ! b ! VPres a.g a.n a.p ;
-        <Past> => v.s ! b ! VPast a.g a.n a.p 
+        <Pres> => v.s ! VPres p a.g a.n a.p ;
+        <Past> => v.s ! VPast p a.g a.n a.p 
     } ;
     
     agrA : Adj -> Gender -> Number -> Case -> Str = \adj,g,n,c ->
 			case <c> of {
 				<Nom> => adj.s ! ANom g n ;
 				<_>		=> adj.s ! AObl
+		} ;
+		
+		agrQ : Quant -> Gender -> Number -> Case -> Str = \quant,g,n,c ->
+			case <c> of {
+				<Nom> => quant.s ! QNom g n ;
+				<_>		=> quant.s ! QObl n
 		} ;
 		
     -- ergativity: subject is nominative in the present tense

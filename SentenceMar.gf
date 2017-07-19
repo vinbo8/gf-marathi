@@ -1,7 +1,7 @@
 concrete SentenceMar of Sentence = CatMar ** open Prelude, ResMar in {
     
   lin
-    UseCl t p cl = {s = t.s ++ cl.s ! p.b ! t.t } ; 
+    UseCl t p cl = {s = t.s ++ cl.s ! p.p ! t.t } ; 
 
 		UseRCl t p rcl = UseCl t p rcl ;
 
